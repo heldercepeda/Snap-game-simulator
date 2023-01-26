@@ -46,4 +46,3 @@ class Player:
         :return: int to be compared with other player's reaction time (smallest will win)
         """
         return choice([_ for _ in range(12 // self.level)])
-
