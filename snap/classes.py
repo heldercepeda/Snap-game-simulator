@@ -48,17 +48,14 @@ class Deck:
 
 
 class Player:
-    def __init__(self, name: str, card_decks: int, level: int = 1):
+    def __init__(self, name: str, card_decks: int):
         """
         Class to represent each player
 
         :param name: Player's name
         :param level: Player's level. Must be 1, 2 or 3 and highest level will have the lowest reaction time
         """
-        assert level in [1, 2, 3]
-        assert name.strip()
         self.name = name
-        self.level = level
         self.face_down_pile: List[Card] = []
         self.face_up_pile: List[Card] = []
         self.winning_pile: List[Card] = []
@@ -70,4 +67,4 @@ class Player:
 
         :return: int to be compared with other player's reaction time (smallest will win)
         """
-        return choice([_ for _ in range(12 // self.level)])
+        return choice([_ for _ in range(12)])
