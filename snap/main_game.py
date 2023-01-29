@@ -1,6 +1,6 @@
 
 # local imports
-from snap.classes import Deck, Player
+from snap.classes import Deck, Player, Card
 
 # external imports
 from typing import List
@@ -9,17 +9,18 @@ from time import sleep
 
 
 class Game:
-    def __init__(self, n_players: int):
+    def __init__(self, n_players: int, testing=False):
         """
         Class simulates a game of SNAP for a given number of players (between 2 and 4)
 
         :param n_players: Number of players in the game
         """
+        self.testing = testing
         self.n_players = n_players
         self.players: List[Player] = []
         self.card_decks: int = 0
         self.collect_info()
-        self.playing_decks = [Deck().deck for _ in range(self.card_decks)]
+        self.playing_decks = [Deck().shuffle_deck() for _ in range(self.card_decks)]
         self.distribute_cards()
         self.play()
         self.results()
@@ -47,7 +48,7 @@ class Game:
             _name = ""
             while not _name:
                 _name = input(f"Player's {_ + 1} name: ").strip()
-            self.players.append(Player(name=_name, card_decks=self.card_decks))
+            self.players.append(Player(name=_name))
 
 
     def distribute_cards(self) -> None:
@@ -97,13 +98,11 @@ class Game:
         :return:
         """
         showing_cards = [p.playing_card for p in self.players if p.playing_card is not None]
-        # print([str(_) for _ in showing_cards])
-
         os.system('cls' if os.name == 'nt' else 'clear')
         print('\n')
         print('Cards on show',end='\n')
         print([str(_) for _ in showing_cards], end='\n\n')
-        sleep(0.3)
+        sleep(0.3) if not self.testing else sleep(0)
         showing_cards = [c.rank for c in showing_cards]
         if len(showing_cards) != len(set(showing_cards)):
             while True:
@@ -122,7 +121,7 @@ class Game:
 
             winner = reaction_times[0][1]
             print(f"{winner.name} wins the round!", end='\n')
-            sleep(1)
+            sleep(1) if not self.testing else sleep(0)
             winner.winning_pile.extend([c for p in self.players for c in p.face_up_pile])
             """
                 Both, face up pile and playing card, need to be reset so the game can continue
@@ -133,7 +132,7 @@ class Game:
 
     def results(self) -> None:
         """
-        Simple function to print SNAP game results in the terminal
+        Function to print SNAP game results in the terminal
 
         :return:
         """

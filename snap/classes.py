@@ -6,9 +6,9 @@ from uuid import uuid4
 
 
 class Card:
-    def __init__(self, u_id: str, suit: str, rank: str):
+    def __init__(self, suit: str, rank: str):
         """
-        Class to represent each card in the deck.
+        Class to represent each card in the deck. Each card will have an id, associated with the belonging deck
 
         :param suit: Must be clubs, diamonds, hearts or spades
         :param rank: Must be A, K, Q, J, 10, 9, 8, 7, 6, 5, 4, 3, 2.
@@ -16,7 +16,6 @@ class Card:
         """
         self.suit = suit
         self.rank = rank
-        self.id = u_id
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.suit}, {self. rank})"
@@ -28,32 +27,29 @@ class Card:
 class Deck:
     def __init__(self):
         """
-        Class to represent a deck of cards
+        Class to represent a deck of cards. Each deck will have a unique id to be used when wrapping up
         """
-        self.id = uuid4().hex
-        self.deck = [Card(u_id=self.id, suit=s, rank=r) for s in Deck.suits for r in Deck.ranks]
-        self.shuffle_deck()
+        self.deck = [Card(suit=s, rank=r) for s in Deck.suits for r in Deck.ranks]
 
-
-    def shuffle_deck(self) -> None:
+    def shuffle_deck(self) -> List[Card]:
         """
         Shuffles deck of cards to insure randomness when distributing cards
 
         :return: None
         """
         shuffle(self.deck)
+        return self.deck
 
     suits = ["clubs", "diamonds", "hearts", "spades"]
     ranks = ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"]
 
 
 class Player:
-    def __init__(self, name: str, card_decks: int):
+    def __init__(self, name: str):
         """
         Class to represent each player
 
         :param name: Player's name
-        :param level: Player's level. Must be 1, 2 or 3 and highest level will have the lowest reaction time
         """
         self.name = name
         self.face_down_pile: List[Card] = []
