@@ -1,11 +1,11 @@
 
 # local imports
-from snap.classes import Deck, Player, Card
+from snap.classes import Deck, Player
 
 # external imports
 from typing import List
 import os
-from time import sleep
+from time import sleep, time
 
 
 class Game:
@@ -15,6 +15,7 @@ class Game:
 
         :param n_players: Number of players in the game
         """
+        self.ts_start = time()
         self.testing = testing
         self.n_players = n_players
         self.players: List[Player] = []
@@ -24,9 +25,15 @@ class Game:
         self.distribute_cards()
         self.play()
         self.results()
+        self.ts_end = time()
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.n_players}, {self.testing})"
+
+    def __str__(self):
+        rv = "{: >10} {: >20} {: >20} {: >20}\n".format(*['', '#Players', '#Decks', 'Running time (s)'])
+        rv += "{: >10} {: >20} {: >20} {: >20}\n".format(*['Summary', self.n_players, self.card_decks, round(self.ts_end - self.ts_start, 1)])
+        return rv
 
     def collect_info(self) -> None:
         """
