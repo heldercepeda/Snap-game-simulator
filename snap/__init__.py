@@ -6,7 +6,6 @@ from snap.main_game import Game
 """
 Module "snap" __init__ file
 
-In a largest application this file should be used to import and/or initialize all necessary python objects.
 Our application only requires one class and the bellow function
 """
 
@@ -32,4 +31,7 @@ def ask_for_number_of_players() -> int:
     return n_players
 
 
+"""
+Object to be imported in run_game.py
+"""
 game = Game

@@ -44,7 +44,7 @@ class Game:
         for each player at that point in time
         Used in testing only
 
-        :return:
+        :return: None
         """
         self.logbook.update(
             {
@@ -60,7 +60,7 @@ class Game:
         """
         Function to collect needed info before game starts
 
-        :return:
+        :return: None
         """
         while True:
             _card_decks = input(f"Number of playing decks: ").strip()
@@ -113,7 +113,7 @@ class Game:
         """
         Function to simulate a game of SNAP between n players
 
-        :return:
+        :return: None
         """
         while True:
             for player in self.players:
@@ -137,7 +137,7 @@ class Game:
         """
         Function to compare cards in play. Will be executed every time a player show/changes the showing card on top of the face up pile
 
-        :return:
+        :return: None
         """
         showing_cards = [p.playing_card for p in self.players if p.playing_card is not None]
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -163,7 +163,7 @@ class Game:
 
             winner = reaction_times[0][1]
             print(f"{winner.name} wins the round!", end='\n')
-            sleep(1) if not self.testing else sleep(0)
+            sleep(1.2) if not self.testing else sleep(0)
             winner.winning_pile.extend([c for p in self.players for c in p.face_up_pile])
             """
                 Both, face up pile and playing card, need to be reset so the game can continue
@@ -176,7 +176,7 @@ class Game:
         """
         Function to print SNAP game results in the terminal
 
-        :return:
+        :return: None
         """
         os.system('cls' if os.name == 'nt' else 'clear')
         print('\n')

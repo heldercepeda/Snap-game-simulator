@@ -9,13 +9,20 @@ from snap import ask_for_number_of_players
 
 class Test(TestCase):
     @patch('builtins.input')
-    def test_ask_for_number_of_players(self, m_input):
+    def test_ask_for_number_of_players(self, m_input) -> None:
+        """
+        Testing number of players to be used in game
+
+        :param m_input: Part of @patch requirements so we can simulate different input
+        :return:
+        """
         scenarios = [
             {
                 'first_input': _input[0],
                 'second_input': _input[1]
             } for _input in [
                 ('just a string', 2),
+                ('', 3),
                 ('   ', 4),
                 ('    2', 2),
                 ('3    ', 3),
