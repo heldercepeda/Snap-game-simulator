@@ -1,8 +1,11 @@
 
 # Snap game simulator
 
-Module will run in a standard python env (no need for install any libraries).\
-Just clone and run **_python run_game.py_** on the terminal
+Module will run in a standard python env (no need for install any libraries).
+
+1. ##### _git clone https://github.com/heldercepeda/Snap-game-simulator.git_
+2. ##### _cd Snap-game-simulator_
+3. ##### _python run_game.py_ (assuming you added python to path variable in windows) or _path\to\file\python.exe run_server.py_ if not
 \
 \
 \
