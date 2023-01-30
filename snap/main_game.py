@@ -5,16 +5,17 @@ from snap.classes import Deck, Player
 # external imports
 from typing import List
 import os
-from time import sleep, time
+from time import sleep, time, time_ns
 
 
 class Game:
-    def __init__(self, n_players: int, testing=False):
+    def __init__(self, n_players: int, testing: bool = False):
         """
         Class simulates a game of SNAP for a given number of players (between 2 and 4)
 
         :param n_players: Number of players in the game
         """
+        self.logbook = {}
         self.ts_start = time()
         self.testing = testing
         self.n_players = n_players
@@ -23,7 +24,9 @@ class Game:
         self.collect_info()
         self.playing_decks = [Deck().shuffle_deck() for _ in range(self.card_decks)]
         self.distribute_cards()
+        self.create_log()
         self.play()
+        self.create_log()
         self.results()
         self.ts_end = time()
 
@@ -34,6 +37,24 @@ class Game:
         rv = "{: >10} {: >20} {: >20} {: >20}\n".format(*['', '#Players', '#Decks', 'Running time (s)'])
         rv += "{: >10} {: >20} {: >20} {: >20}\n".format(*['Summary', self.n_players, self.card_decks, round(self.ts_end - self.ts_start, 1)])
         return rv
+
+    def create_log(self) -> None:
+        """
+        When executed, creates a log about how "face down pile", "face up pile" and "winning pile" looks like
+        for each player at that point in time
+        Used in testing only
+
+        :return:
+        """
+        self.logbook.update(
+            {
+                time_ns(): {
+                    'face_down_pile': [len(p.face_down_pile) for p in self.players],
+                    'face_up_pile': [len(p.face_up_pile) for p in self.players],
+                    'winning_pile': [len(p.winning_pile) for p in self.players]
+                }
+            }
+        )
 
     def collect_info(self) -> None:
         """
@@ -59,7 +80,6 @@ class Game:
             while not _name:
                 _name = input(f"Player's {_ + 1} name: ").strip()
             self.players.append(Player(name=_name))
-
 
     def distribute_cards(self) -> None:
         """

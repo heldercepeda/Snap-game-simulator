@@ -20,7 +20,7 @@ class TestGame(TestCase):
         :return:
         """
         super(TestGame, cls).setUpClass()
-        max_decks = 3
+        max_decks = 7
         testing_scenarios = [
             {
                 "players": player,
@@ -39,14 +39,61 @@ class TestGame(TestCase):
 
     def test_game_round(self) -> None:
         """
-        Check if no cards are missing or duplicated after game.
-        Number of cards after combining all three piles from each user must be equal to starting number of cards
+        Testing multiple aspects before and after the game happens for each scenario
 
         :return:
         """
         for scenario in self.scenarios:
-            all_cards = [c for p in scenario.players for c in p.face_down_pile] + \
-                        [c for p in scenario.players for c in p.face_up_pile] + \
-                        [c for p in scenario.players for c in p.winning_pile]
 
-            self.assertEqual(len(all_cards), scenario.card_decks * 52)
+            expected_keys = ['face_down_pile', 'face_up_pile', 'winning_pile']
+            test_logbook = scenario.logbook
+            _keys = sorted(list(test_logbook.keys()))
+            """
+                logbook must have all expected keys
+            """
+            for k in _keys:
+                _inside_keys = set(list(test_logbook[k].keys()))
+                self.assertSetEqual(set(expected_keys), _inside_keys)
+            """
+                create_log function is only used twice, only two entries are expected in logbook
+            """
+            self.assertEqual(2, len(_keys))
+            """
+                all elements in list inside logbook must be int and equal or greater then zero
+            """
+            for k1 in _keys:
+                for k2 in expected_keys:
+                    self.assertTrue(all(isinstance(x, int) for x in test_logbook[k1][k2]))
+                    self.assertTrue(all(x >= 0 for x in test_logbook[k1][k2]))
+
+            # before game starts
+            _key = _keys[0]
+            _max = max(test_logbook[_key]['face_down_pile'])
+            _min = min(test_logbook[_key]['face_down_pile'])
+            """
+                Difference between number of cards of each player cannot be greater that 1
+            """
+            self.assertIn(_max - _min, [0, 1])
+            """
+                No cards are missing after distributing them
+            """
+            self.assertEqual(sum(test_logbook[_key]['face_down_pile']), scenario.card_decks * 52)
+            """
+                face up pile and winning pile must be empty for each player
+            """
+            self.assertEqual(sum(test_logbook[_key]['face_up_pile']), 0)
+            self.assertEqual(sum(test_logbook[_key]['winning_pile']), 0)
+
+            # after game ends
+            _key = _keys[1]
+            """
+                face down pile must be empty for each player
+            """
+            self.assertEqual(sum(test_logbook[_key]['face_down_pile']), 0)
+            """
+                summing up everything in face up pile and winning pile for each player must be equal to the total number of cards
+            """
+            self.assertEqual(
+                sum(test_logbook[_key]['face_up_pile']) + sum(test_logbook[_key]['winning_pile']),
+                scenario.card_decks * 52
+            )
