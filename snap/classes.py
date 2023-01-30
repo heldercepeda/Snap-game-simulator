@@ -7,7 +7,7 @@ from typing import List, Union
 class Card:
     def __init__(self, suit: str, rank: str):
         """
-        Class to represent each card in the deck. Each card will have an id, associated with the belonging deck
+        Class to represent each card in the deck.
 
         :param suit: Must be clubs, diamonds, hearts or spades
         :param rank: Must be A, K, Q, J, 10, 9, 8, 7, 6, 5, 4, 3, 2.
@@ -29,7 +29,7 @@ class Deck:
 
     def __init__(self):
         """
-        Class to represent a deck of cards. Each deck will have a unique id to be used when wrapping up
+        Class to represent a deck of cards
         """
         self.deck = [Card(suit=s, rank=r) for s in Deck.suits for r in Deck.ranks]
 
@@ -37,7 +37,7 @@ class Deck:
         """
         Shuffles deck of cards to insure randomness when distributing cards
 
-        :return: None
+        :return: list of cards
         """
         shuffle(self.deck)
         return self.deck
