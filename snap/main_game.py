@@ -67,15 +67,27 @@ class Game:
 
         :return: None
         """
-        # TODO: needs to be improved a bit
         all_cards = [card for deck in self.playing_decks for card in deck]
         _slice = len(all_cards) // self.n_players
+        _control = _slice * self.n_players != len(all_cards)
         for i, player in enumerate(self.players):
             s = i * _slice
-            e = (i + 1) * _slice if not i == len(self.players) - 1 else len(all_cards)
+            e = (i + 1) * _slice
             cards_for_player = all_cards[s:e]
             player.face_down_pile = cards_for_player
-
+        """
+            If there is any remaining cards, they will be distributed one per player until
+            there is no cards left
+        """
+        if _control:
+            remaining_cards = all_cards[_slice * self.n_players:]
+            while True:
+                for player in self.players:
+                    if not remaining_cards:
+                        break
+                    card = remaining_cards.pop()
+                    player.face_down_pile.append(card)
+                break
 
     def play(self) -> None:
         """
