@@ -25,6 +25,9 @@ class Game:
         self.play()
         self.results()
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.n_players}, {self.testing})"
+
     def collect_info(self) -> None:
         """
         Function to collect needed info before game starts

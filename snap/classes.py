@@ -2,7 +2,6 @@
 # external imports
 from random import choice, shuffle
 from typing import List, Union
-from uuid import uuid4
 
 
 class Card:
@@ -25,6 +24,9 @@ class Card:
 
 
 class Deck:
+    suits = ["clubs", "diamonds", "hearts", "spades"]
+    ranks = ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"]
+
     def __init__(self):
         """
         Class to represent a deck of cards. Each deck will have a unique id to be used when wrapping up
@@ -40,8 +42,11 @@ class Deck:
         shuffle(self.deck)
         return self.deck
 
-    suits = ["clubs", "diamonds", "hearts", "spades"]
-    ranks = ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"]
+    def __repr__(self):
+        return f"{self.__class__.__name__}()"
+
+    def __str__(self):
+        return ", ".join([str(_) for _ in self.deck])
 
 
 class Player:
@@ -57,6 +62,14 @@ class Player:
         self.winning_pile: List[Card] = []
         self.playing_card: Union[Card, None] = None
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.name})"
+
+    def __str__(self):
+        rv = "{: >20} {: >20} {: >20} {: >20}\n".format(*["", '#Winning pile', '#Face down pile', '#Face up pile'])
+        rv += "{: >20} {: >20} {: >20} {: >20}\n".format(*[self.name, len(self.winning_pile), len(self.face_down_pile), len(self.face_up_pile)])
+        return rv
+
     def reaction_time(self) -> int:
         """
         Function will be used to decide which player will win
@@ -64,3 +77,6 @@ class Player:
         :return: int to be compared with other player's reaction time (smallest will win)
         """
         return choice([_ for _ in range(12)])
+
+
+print(Player(name='Helder'))
